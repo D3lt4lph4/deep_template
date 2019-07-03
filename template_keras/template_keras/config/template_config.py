@@ -11,6 +11,11 @@ class TemplateConfiguration(ABC):
 
     @property
     @abstractmethod
+    def validation_steps(self):
+        raise NotImplementedError("Property should contain the number of validation steps to perform.")
+
+    @property
+    @abstractmethod
     def workers(self):
         raise NotImplementedError("Property should contain the number of workers to be called for data generation.")
 
@@ -118,4 +123,8 @@ class TemplateConfiguration(ABC):
 
     @abstractmethod
     def prepare_evaluator(self):
+        raise NotImplementedError("Should prepare the evaluator for testing, i.e the test generator. This function is here to avoid loading unnecessary stuff.")
+
+    @abstractmethod
+    def prepare_horovod(self, horovod):
         raise NotImplementedError("Should prepare the evaluator for testing, i.e the test generator. This function is here to avoid loading unnecessary stuff.")
