@@ -1,9 +1,6 @@
 from abc import abstractmethod
 
-import numpy as np
-
-from keras.utils import Sequence
-from keras.utils import to_categorical
+from tensorflow.keras.utils import Sequence
 
 class TemplateGenerator(Sequence):
     """A generator for the pipeline given as template, the template is assured to work if the generator follows this example."""
