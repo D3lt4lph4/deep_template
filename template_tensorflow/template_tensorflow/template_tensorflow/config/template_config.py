@@ -1,10 +1,3 @@
-from os.path import join
-
-from keras.optimizers import Adadelta
-from keras.losses import categorical_crossentropy
-from keras.callbacks import ModelCheckpoint, TerminateOnNaN, CSVLogger, EarlyStopping, ReduceLROnPlateau
-from keras.datasets import mnist
-
 from abc import ABC, abstractmethod
 
 class TemplateConfiguration(ABC):
