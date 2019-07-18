@@ -7,6 +7,5 @@ setup(
     author='Deguerre Benjmain',
     author_email='benjamin.deguerre@vinci-energies.net',
     license='',
-    packages=find_packages(),
-    zip_safe=False,
+    packages=find_packages()
 )

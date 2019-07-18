@@ -5,19 +5,18 @@ from keras.losses import categorical_crossentropy
 from keras.callbacks import ModelCheckpoint, TerminateOnNaN, CSVLogger, EarlyStopping, ReduceLROnPlateau
 from keras.datasets import mnist
 
-from template.networks import MNISTExample
-from template.generators import Generator
-from template.displayer import MNISTDisplayer
-from template.evaluators import Evaluator
+from mnist_example.networks import MNISTExample
+from mnist_example.generators import MNISTGenerator
+from mnist_example.displayers import MNISTDisplayer
+from mnist_example.evaluators import MNISTEvaluator
 
-from template.config import TemplateConfiguration
+from template_keras.config import TemplateConfiguration
 
 class TrainingConfiguration(TemplateConfiguration):
 
     def __init__(self):
         # Variables to hold the description of the experiment
         self.config_description = "This is the template config file."
-        self.experiment_description = "Dummy experiment. Only here to test the template file. It trains the keras [exemple](https://github.com/keras-team/keras/blob/master/examples/mnist_cnn.py) on the MNIST dataset"
 
         # System dependent variable
         self._workers = 1
@@ -26,8 +25,8 @@ class TrainingConfiguration(TemplateConfiguration):
         self._displayer = MNISTDisplayer()
 
         # Variables for comet.ml
-        self._project_name = "general"
-        self._workspace = "d3lt4lph4"
+        self._project_name = "my_project"
+        self._workspace = "my_workspace"
 
         # Network variables
         self.num_classes = 10
@@ -54,12 +53,13 @@ class TrainingConfiguration(TemplateConfiguration):
 
         self._callbacks = [self.terminate_on_nan, self.early_stopping, self.reduce_lr_on_plateau]
 
-        # Creating the training and validation generator
+        # Creating the training and validation generator (you may want to move these to the prepare functions)
         train_data, validation_data = mnist.load_data()
-        self._train_generator = Generator(train_data, self.batch_size)
-        self._validation_generator = Generator(validation_data, self.batch_size)
-        # Dummy test for exemple
-        self._test_generator = Generator(validation_data, self.batch_size)
+        self._train_generator = MNISTGenerator(train_data, self.batch_size)
+        self._validation_generator = MNISTGenerator(validation_data, self.batch_size)
+        # Dummy test for example
+        self._test_generator = MNISTGenerator(validation_data, self.batch_size)
+
         self._evaluator = None
         self._displayer = MNISTDisplayer()
 
@@ -76,7 +76,7 @@ class TrainingConfiguration(TemplateConfiguration):
         pass
 
     def prepare_evaluator(self):
-        self._evaluator = Evaluator()
+        self._evaluator = MNISTEvaluator()
 
     def prepare_testing_generator(self):
         pass

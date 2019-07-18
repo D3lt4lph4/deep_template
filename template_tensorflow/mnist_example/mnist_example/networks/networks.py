@@ -1,6 +1,6 @@
-from tensorflow.keras import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
-
+from keras import backend as K
+from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 
 def MNISTExample(num_classes=10, input_shape=(28, 28)):
     """ A dummy sequential model. To be used to show the usage of the drawer function.
