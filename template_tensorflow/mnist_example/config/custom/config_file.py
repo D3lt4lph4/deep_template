@@ -1,16 +1,16 @@
 from os.path import join
 
-from keras.optimizers import Adadelta
-from keras.losses import categorical_crossentropy
-from keras.callbacks import ModelCheckpoint, TerminateOnNaN, CSVLogger, EarlyStopping, ReduceLROnPlateau
-from keras.datasets import mnist
+from tensorflow.keras.optimizers import Adadelta
+from tensorflow.keras.losses import categorical_crossentropy
+from tensorflow.keras.callbacks import ModelCheckpoint, TerminateOnNaN, CSVLogger, EarlyStopping, ReduceLROnPlateau
+from tensorflow.keras.datasets import mnist
 
 from mnist_example.networks import MNISTExample
 from mnist_example.generators import MNISTGenerator
 from mnist_example.displayers import MNISTDisplayer
 from mnist_example.evaluators import MNISTEvaluator
 
-from template_keras.config import TemplateConfiguration
+from template_tensorflow.config import TemplateConfiguration
 
 class TrainingConfiguration(TemplateConfiguration):
 

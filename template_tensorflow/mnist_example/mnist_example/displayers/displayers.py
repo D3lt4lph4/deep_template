@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from template_keras.displayers import TemplateDisplayer
+from template_tensorflow.displayers import TemplateDisplayer
 
 class MNISTDisplayer(TemplateDisplayer):
 

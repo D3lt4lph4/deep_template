@@ -2,7 +2,7 @@ import time
 
 import numpy as np
 
-from template_keras.evaluators import TemplateEvaluator
+from template_tensorflow.evaluators import TemplateEvaluator
 
 class MNISTEvaluator(TemplateEvaluator):
 

@@ -1,9 +1,8 @@
 import numpy as np
 
-from keras.utils import Sequence
-from keras.utils import to_categorical
+from tensorflow.keras.utils import to_categorical
 
-from template_keras.generators import TemplateGenerator
+from template_tensorflow.generators import TemplateGenerator
 
 class MNISTGenerator(TemplateGenerator):
     'Generates data for Keras'

@@ -1,16 +1,12 @@
-from keras import backend as K
-from keras.models import Sequential
-from keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten, Dense, Dropout
 
 def MNISTExample(num_classes=10, input_shape=(28, 28)):
     """ A dummy sequential model. To be used to show the usage of the drawer function.
     # Returns
         A Keras model instance for training on the MNIST dataset.
     """
-    if K.image_data_format() == 'channels_last':
-        input_shape = (*input_shape, 1)
-    else:
-        input_shape = (1, *input_shape)
+    input_shape = (*input_shape, 1)
 
     model = Sequential()
     model.add(Conv2D(32, kernel_size=(3, 3),
