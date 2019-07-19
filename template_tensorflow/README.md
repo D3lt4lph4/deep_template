@@ -48,7 +48,7 @@ For the example below, we will assume that a python env was created and activate
 
 ```bash
 # Let us install the package
-cd template_keras
+cd template_tensorflow
 python setup.py install
 
 # We will run the mnist example, but first let's create the environment variables and some dummy directory to save the results to

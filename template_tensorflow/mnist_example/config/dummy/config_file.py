@@ -5,18 +5,19 @@ from keras.losses import categorical_crossentropy
 from keras.callbacks import ModelCheckpoint, TerminateOnNaN, CSVLogger, EarlyStopping, ReduceLROnPlateau
 from keras.datasets import mnist
 
-from mnist_example.networks import MNISTExample
-from mnist_example.generators import DummyGenerator
-from mnist_example.displayers import MNISTDisplayer
-from mnist_example.evaluators import MNISTEvaluator
+from template.networks import MNISTExample
+from template.generators import DummyGenerator
+from template.displayer import MNISTDisplayer
+from template.evaluators import Evaluator
 
-from template_keras.config import TemplateConfiguration
+from template.config import TemplateConfiguration
 
 class TrainingConfiguration(TemplateConfiguration):
 
     def __init__(self):
         # Variables to hold the description of the experiment
-        self.config_description = "This is the template dummy config file."
+        self.config_description = "This is the template config file."
+        self.experiment_description = "Dummy experiment. Only here to test the template file. It trains the keras [exemple](https://github.com/keras-team/keras/blob/master/examples/mnist_cnn.py) on the MNIST dataset"
 
         # System dependent variable
         self._workers = 1
@@ -24,9 +25,9 @@ class TrainingConfiguration(TemplateConfiguration):
         self._gpus = 1
 
         # Variables for comet.ml
-        self._project_name = "my_project"
-        self._workspace = "my_workspace"
-
+        self._project_name = "general"
+        self._workspace = "d3lt4lph4"
+        self.output_dir = join(environ["EXPERIMENTS_OUTPUT_DIRECTORY"], "{}_{}_{}".format(config.workspace, config.project_name, key))
         # Network variables
         self.num_classes = 10
         self.img_size = (28, 28)
@@ -78,7 +79,7 @@ class TrainingConfiguration(TemplateConfiguration):
         pass
     
     def prepare_evaluator(self):
-        self._evaluator = MNISTEvaluator()
+        self._evaluator = Evaluator()
     
     def prepare_testing_generator(self):
         self._test_generator = DummyGenerator(**self.test_generator_params)

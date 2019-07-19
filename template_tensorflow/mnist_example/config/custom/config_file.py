@@ -2,7 +2,7 @@ from os.path import join
 
 from tensorflow.keras.optimizers import Adadelta
 from tensorflow.keras.losses import categorical_crossentropy
-from tensorflow.keras.callbacks import ModelCheckpoint, TerminateOnNaN, CSVLogger, EarlyStopping, ReduceLROnPlateau
+from tensorflow.keras.callbacks import ModelCheckpoint, TerminateOnNaN, EarlyStopping, ReduceLROnPlateau, TensorBoard
 from tensorflow.keras.datasets import mnist
 
 from mnist_example.networks import MNISTExample
@@ -14,7 +14,8 @@ from template_tensorflow.config import TemplateConfiguration
 
 class TrainingConfiguration(TemplateConfiguration):
 
-    def __init__(self):
+    def __init__(self, output_dir, key):
+
         # Variables to hold the description of the experiment
         self.config_description = "This is the template config file."
 
@@ -27,6 +28,7 @@ class TrainingConfiguration(TemplateConfiguration):
         # Variables for comet.ml
         self._project_name = "my_project"
         self._workspace = "my_workspace"
+        self.output_dir = join(output_dir, "{}_{}_{}".format(self.workspace, self.project_name, key))
 
         # Network variables
         self.num_classes = 10
@@ -35,23 +37,25 @@ class TrainingConfiguration(TemplateConfiguration):
         self._network = MNISTExample(self.num_classes)
 
         # Training variables
-        self._epochs = 12
+        self._epochs = 5
         self._batch_size = 128
         self._steps_per_epoch = 60000 // 128
         self._optimizer = Adadelta()
         self._loss = categorical_crossentropy
         self._metrics = ['accuracy']
 
-        # Keras stuff
-        self.model_checkpoint = None
-        self.csv_logger = None
-        self.terminate_on_nan = TerminateOnNaN()
-        self.early_stopping_params = {"monitor":'val_loss', "min_delta":0, "patience":7}
-        self.early_stopping = EarlyStopping(**self.early_stopping_params)
-        self.reduce_lr_on_plateau_params = {"monitor":'val_loss', "factor":0.1, "patience":5}
-        self.reduce_lr_on_plateau = ReduceLROnPlateau(**self.reduce_lr_on_plateau_params)
+        self._callbacks = []
 
-        self._callbacks = [self.terminate_on_nan, self.early_stopping, self.reduce_lr_on_plateau]
+        self.early_stopping_params = {"monitor":'val_loss', "min_delta":0, "patience":7}
+        self.reduce_lr_on_plateau_params = {"monitor":'val_loss', "factor":0.1, "patience":5}
+
+        self.tensorboard = TensorBoard(join(self.output_dir, "checkpoints/logs"))
+        self.terminate_on_nan = TerminateOnNaN()
+        self.early_stopping = EarlyStopping(**self.early_stopping_params)
+        self.reduce_lr_on_plateau = ReduceLROnPlateau(**self.reduce_lr_on_plateau_params)
+        self.model_checkpoint = ModelCheckpoint(filepath=join(self.output_dir, "checkpoints", "cp-{epoch:04d}_loss-{loss:.4f}_val_loss-{val_loss:.4f}.ckpt"), verbose=1, save_best_only=True, save_weights_only=True)
+
+        self._callbacks = [self.tensorboard, self.terminate_on_nan, self.early_stopping, self.reduce_lr_on_plateau, self.model_checkpoint]
 
         # Creating the training and validation generator (you may want to move these to the prepare functions)
         train_data, validation_data = mnist.load_data()
@@ -62,15 +66,6 @@ class TrainingConfiguration(TemplateConfiguration):
 
         self._evaluator = None
         self._displayer = MNISTDisplayer()
-
-    def add_csv_logger(self, output_path, filename="results.csv", separator=',', append=True):
-        self.csv_logger = CSVLogger(filename=join(output_path, filename), separator=separator, append=append)
-        self.callbacks.append(self.csv_logger)
-
-    def add_model_checkpoint(self, output_path, verbose=1, save_best_only=True):
-
-        self.model_checkpoint = ModelCheckpoint(filepath=join(output_path, "epoch-{epoch:02d}_loss-{loss:.4f}_val_loss-{val_loss:.4f}.h5"), verbose=verbose, save_best_only=save_best_only)
-        self.callbacks.append(self.model_checkpoint)
 
     def prepare_for_inference(self):
         pass
