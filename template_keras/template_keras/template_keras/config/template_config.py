@@ -58,6 +58,11 @@ class TemplateConfiguration(ABC):
     @abstractmethod
     def steps_per_epoch(self):
         raise NotImplementedError("Property should contain the number of steps per epochs.")
+    
+    @property
+    @abstractmethod
+    def validation_steps(self):
+        raise NotImplementedError("Property should contain the number of validation steps per epochs.")
 
     @property
     @abstractmethod
